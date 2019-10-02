@@ -1,5 +1,3 @@
-// Compiled with: g++ -Wall -std=c++14 -pthread
-
 #include <algorithm> // STL
 #include <iostream>
 #include <vector>
@@ -22,25 +20,9 @@ std::ostream &operator<<(std::ostream &out,
     return out;
 }
 
-// [1,2,3]
-void dfs(const std::vector<int> &v, size_t start, size_t size,
-         std::vector<int> curr, std::vector<std::vector<int>> &m)
-{
-    if (curr.size() == size)
-    {
-        m.push_back(curr);
-        return;
-    }
-
-    for (size_t i = start; i < v.size(); ++i)
-    {
-        curr.push_back(v[i]);
-        dfs(v, i + 1, size, curr, m);
-        curr.pop_back();
-    }
-}
-
-// [1,2,3]
+/**
+ * permutate using DFS
+ */
 void dfs_perm(const std::vector<int> &v, size_t start, size_t size,
               std::vector<bool> &status, std::vector<int> curr,
               std::vector<std::vector<int>> &m)
@@ -51,6 +33,7 @@ void dfs_perm(const std::vector<int> &v, size_t start, size_t size,
         return;
     }
 
+    // dfs from nodes one by one
     for (size_t i = start; i < v.size(); ++i)
     {
         if (not status[i])
@@ -64,9 +47,10 @@ void dfs_perm(const std::vector<int> &v, size_t start, size_t size,
     }
 }
 
-// dfs2([1,2],0,2,mat): curr=[1] start=0
-//  dfs2([1,2],1,2): curr[1,2] start=1
-
+/**
+ * treat vector nodes as a fully connected graph
+ * use DFS to generate all subsets
+ */
 std::vector<std::vector<int>> allsubset(const std::vector<int> &v)
 {
     std::vector<std::vector<int>> ret;
