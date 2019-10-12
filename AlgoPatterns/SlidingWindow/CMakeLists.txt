@@ -21,3 +21,4 @@ project(SlidingWindow)
 #
 add_subdirectory(AvgSubArray)
 add_subdirectory(MaxSubArraySum)
+add_subdirectory(MinSubArrayGivenSum)

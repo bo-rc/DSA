@@ -20,3 +20,4 @@ project(AlgoPatterns)
 #-------------------------------------------------------------------------------
 #
 add_subdirectory(SlidingWindow)
+add_subdirectory(Util)
