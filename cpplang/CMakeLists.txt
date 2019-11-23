@@ -22,3 +22,4 @@ project(cpplang)
 # Add Library dependencies
 add_subdirectory(PerfectForwarding)
 add_subdirectory(threads)
+add_subdirectory(Singleton)
