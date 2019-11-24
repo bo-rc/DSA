@@ -7,6 +7,7 @@
 #include <numeric>
 #include <limits>
 #include <deque>
+#include "Output.hpp"
 
 class MaxSubArraySumOfSizeK
 {
@@ -67,9 +68,6 @@ int main(int argc, char *argv[])
         MaxSubArraySumOfSizeK::findMaxSubSumLinear(K, std::vector<int>{1, 3, 2, 6, -1, 4, 1, 8, 2}, res);
     std::cout << "Averages of subarrays of size " << K << ": " << result << std::endl;
 
-    for (const auto &ele : res)
-    {
-        std::cout << ele << ", ";
-    }
+    std::cout << res;
     std::cout << std::endl;
 }

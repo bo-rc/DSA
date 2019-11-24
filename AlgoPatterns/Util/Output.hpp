@@ -1,11 +1,12 @@
 #include <vector>
 #include <iostream>
 
-template <typename T>
-std::ostream &operator<<(std::ostream &out, const std::vector<T> &arr)
+// using template template for generic cout of all container types
+template <typename T, template <typename...> class Container, typename... Args>
+std::ostream &operator<<(std::ostream &out, const Container<T, Args...> &cont)
 {
-    out << "Array of " << arr.size() << " elements: ";
-    for (const auto &ele : arr)
+    out << "Container type: " << typeid(cont).name() << " of size: " << cont.size() << " elements: ";
+    for (const auto &ele : cont)
     {
         out << ele << ", ";
     }
