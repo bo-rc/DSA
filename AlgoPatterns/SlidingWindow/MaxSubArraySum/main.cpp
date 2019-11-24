@@ -16,8 +16,8 @@ public:
     {
         T maxSubSum = std::numeric_limits<T>::min();
 
-        size_t numComp = arr.size() - K + 1;
-        for (size_t i = 0; i < numComp; ++i)
+        // given window size K, need to do (arr.size() - K + 1) times compute
+        for (size_t i = 0; i < arr.size() - K + 1; ++i)
         {
             T sum = std::accumulate(arr.cbegin() + i, arr.cbegin() + i + K, T(0));
             if (sum > maxSubSum)
@@ -38,8 +38,7 @@ public:
         std::deque<T> window;
         std::copy(arr.cbegin(), arr.cbegin() + K, std::back_inserter(window));
 
-        size_t numComp = arr.size() - K + 1;
-        for (size_t i = 0; i < numComp; ++i)
+        for (size_t i = 0; i < arr.size() - K + 1; ++i)
         {
             T sum = std::accumulate(window.cbegin(), window.cend(), T(0));
             if (sum > maxSubSum)
@@ -48,7 +47,7 @@ public:
                 maxIdx = i;
             }
 
-            // last window needs special treatment
+            // last window do not pop and push_back
             if (i + K < arr.size())
             {
                 window.pop_front();
@@ -68,7 +67,7 @@ int main(int argc, char *argv[])
         MaxSubArraySumOfSizeK::findMaxSubSumLinear(K, std::vector<int>{1, 3, 2, 6, -1, 4, 1, 8, 2}, res);
     std::cout << "Averages of subarrays of size " << K << ": " << result << std::endl;
 
-    for (auto ele : res)
+    for (const auto &ele : res)
     {
         std::cout << ele << ", ";
     }
