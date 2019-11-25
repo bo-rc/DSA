@@ -24,19 +24,18 @@ public:
         {
             if (charSet.count(ch) > 0)
             {
-
-                while (true)
+                char frontChar;
+                while ((frontChar = std::move(stringWindow.front())) != ch)
                 {
-                    auto frontChar = std::move(stringWindow.front());
                     stringWindow.pop_front();
                     charSet.erase(frontChar);
-                    if (frontChar == ch)
-                    {
-                        stringWindow.push_back(ch);
-                        charSet.insert(ch);
-                        break;
-                    }
                 }
+
+                stringWindow.pop_front();
+                charSet.erase(frontChar);
+                stringWindow.push_back(ch);
+                charSet.insert(ch);
+
                 continue;
             }
 
