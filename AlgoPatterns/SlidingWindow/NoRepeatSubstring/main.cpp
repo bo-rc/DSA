@@ -1,7 +1,10 @@
 /**
- * Given an array of positive numbers and a positive number ‘S’, 
- * find the length of the smallest contiguous subarray whose sum 
- * is greater than or equal to ‘S’. Return 0, if no such subarray exists.
+ * Problem Statement
+ *  Given a string, find the length of the longest substring which has no repeating characters.
+ * Example 1:
+ *  Input: String="aabccbb"
+ *  Output: 3
+ *  Explanation: The longest substring without any repeating characters is "abc".
  */
 
 #include <iostream>

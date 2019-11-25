@@ -1,21 +1,23 @@
 /**
  * Problem Statement
- *  Given a string, find the length of the longest substring in it with no more than K distinct characters.
+ * Given a string with lowercase letters only, 
+ * if you are allowed to replace no more than ‘k’ letters with any letter, 
+ * find the length of the longest substring having the same letters after replacement.
  * 
  * Example 1:
- *  Input: String="araaci", K=2
- *  Output: 4   
- *  Explanation: The longest substring with no more than '2' distinct characters is "araa".
+ *  Input: String="aabccbb", k=2
+ *  Output: 5  
+ *  Explanation: Replace the two 'c' with 'b' to have a longest repeating substring "bbbbb".
  * 
  * Example 2:
- *  Input: String="araaci", K=1
- *  Output: 2
- *  Explanation: The longest substring with no more than '1' distinct characters is "aa".
+ *  Input: String="abbcb", k=1
+ *  Output: 4
+ *  Explanation: Replace the 'c' with 'b' to have a longest repeating substring "bbbb".
  * 
  * Example 3:
- *  Input: String="cbbebi", K=3
- *  Output: 5
- *  Explanation: The longest substrings with no more than '3' distinct characters are "cbbeb" & "bbebi".
+ *  Input: String="abccde", k=1
+ *  Output: 3
+ *  Explanation: Replace the 'b' or 'd' with 'c' to have the longest repeating substring "ccc".
  */
 
 #include <iostream>
@@ -25,7 +27,7 @@
 #include <map>
 #include "Output.hpp"
 
-class LongestSubstringKDistinct
+class LongestSubstringWithSameLettersAfterReplacement
 {
 public:
     static size_t findLength(const std::string &str, int len, std::deque<char> &outString)
@@ -68,15 +70,15 @@ public:
 int main(int argc, char *argv[])
 {
     std::deque<char> out;
-    std::cout << " \"araaci\", 2 : " << LongestSubstringKDistinct::findLength("araaci", 2, out)
+    std::cout << " \"araaci\", 2 : " << LongestSubstringWithSameLettersAfterReplacement::findLength("araaci", 2, out)
               << std::endl;
     std::cout << out;
 
-    std::cout << " \"araaci\", 1 : " << LongestSubstringKDistinct::findLength("araaci", 1, out)
+    std::cout << " \"araaci\", 1 : " << LongestSubstringWithSameLettersAfterReplacement::findLength("araaci", 1, out)
               << std::endl;
     std::cout << out;
 
-    std::cout << " \"cbbebi\", 3 : " << LongestSubstringKDistinct::findLength("cbbebi", 3, out)
+    std::cout << " \"cbbebi\", 3 : " << LongestSubstringWithSameLettersAfterReplacement::findLength("cbbebi", 3, out)
               << std::endl;
     std::cout << out;
 }
