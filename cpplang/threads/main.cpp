@@ -1,14 +1,21 @@
 #include <thread>
 #include <iostream>
+#include <vector>
 
 int main()
 {
-    std::thread t = std::thread([&]() {
-        std::cout << std::thread::hardware_concurrency() << "  " << std::endl
-                  << t.get_id() << std::endl;
-    });
+    std::vector<std::thread> ts;
+    for (int i = 0; i < std::thread::hardware_concurrency(); ++i)
+    {
+        std::thread t = std::thread([&]() {
+            std::cout << i << ": "
+                      << t.get_id() << std::endl;
+        });
+        ts.push_back(std::move(t));
+    }
 
-    t.join();
+    for (auto &t : ts)
+        t.join();
 
     return 0;
 }

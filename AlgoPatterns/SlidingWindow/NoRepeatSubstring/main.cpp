@@ -25,8 +25,10 @@ public:
 
         for (const char &ch : str)
         {
+            // 'ch' already in set:
             if (charSet.count(ch) > 0)
             {
+                // must remove all char's up to the existing 'ch'
                 char frontChar;
                 while ((frontChar = std::move(stringWindow.front())) != ch)
                 {
@@ -34,17 +36,22 @@ public:
                     charSet.erase(frontChar);
                 }
 
+                // remove the existing 'ch'
                 stringWindow.pop_front();
                 charSet.erase(frontChar);
+
+                // add new 'ch'
                 stringWindow.push_back(ch);
                 charSet.insert(ch);
 
                 continue;
             }
 
+            // 'ch' is new, add to set
             stringWindow.push_back(ch);
             charSet.insert(ch);
 
+            // better res found then update
             if (stringWindow.size() > maxLen)
             {
                 maxLen = stringWindow.size();
