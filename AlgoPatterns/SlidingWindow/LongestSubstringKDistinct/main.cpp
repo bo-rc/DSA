@@ -39,7 +39,9 @@ public:
             charDict[ch] += 1;
             stringWindow.push_back(ch);
 
-            // the size of charDict equals to number of distinctive characters
+            // the size of charDict is the number of keys,
+            // equals to number of distinctive characters
+            // when the number > len, remove a front element
             while (charDict.size() > len and (not stringWindow.empty()))
             {
                 auto frontChar = std::move(stringWindow.front());
@@ -55,6 +57,7 @@ public:
                 }
             }
 
+            // update with better result
             if (stringWindow.size() > maxLen)
             {
                 maxLen = stringWindow.size();

@@ -13,9 +13,10 @@ public:
     template <typename T>
     static std::vector<double> findAverages(int K, const std::vector<T> &arr)
     {
-        int numElements = arr.size() - K + 1;
-        std::vector<double> result(numElements);
-        for (int i = 0; i < numElements; ++i)
+        // num of windows/computes need to be processed
+        int numWindows = arr.size() - K + 1;
+        std::vector<double> result(numWindows);
+        for (int i = 0; i < numWindows; ++i)
         {
             // find sum of next 'K' elements
             /**
