@@ -1,10 +1,6 @@
 #include <iostream>
 #include "KernelFilter.hpp"
 #include <vector>
-#include <algorithm>
-#include <cmath>
-#include <limits>
-#include <cassert>
 
 void test_online()
 {
@@ -21,8 +17,27 @@ void test_online()
     std::cout << "online test ended \n";
 }
 
+void test_offline()
+{
+    std::cout << "offline test started: \n";
+    std::vector<float> myArray {1,1,1,1,1,1,1};
+    std::vector<float> k{0.1, 0.25, 0.3, 0.25, 0.1};
+    KernelFilter myFilter(k);
+    
+    std::vector<float> filteredArray {};
+
+    for (const auto& element: myArray)
+    {
+        std::cout << myFilter.update(element) << ", ";
+    }
+    std::cout << std::endl;
+
+    std::cout << "offline test ended \n";
+}
+
 int main()
 {
-    test_online();
+    // test_online();
+    test_offline();
     return 0;
 }
