@@ -8,6 +8,7 @@
 
 #include "array.h"
 #include <utility>
+#include <iostream>
 
 Array::Array() : m_cap(0),
                  m_size(0)
@@ -108,7 +109,7 @@ void Array::push_back(int ele)
 {
     if (m_cap - m_size < 1)
     {
-        auto new_cap = 2 * m_cap + 1;
+        size_t new_cap = 2 * m_cap + 1;
         auto new_arr = std::make_unique<int[]>(new_cap);
 
         for (size_t i = 0; i < m_size; ++i)

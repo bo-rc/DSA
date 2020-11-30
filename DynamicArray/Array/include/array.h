@@ -1,16 +1,11 @@
-/***************************************************************************
- *                                                                         *
- *   Copyright (C) 2018 by boliu                                           *
- *                                                                         *
- *   https://www.bo-liu.com                                                *
- *                                                                         *
- ***************************************************************************/
+/**
+ * Implement Dynamic array of int
+ * bonus: how about dynamic array of any type 'T'
+*/
 
 #ifndef ARRAY_H
 #define ARRAY_H
 
-#include <iostream>
-#include <cstdio>
 #include <memory>
 
 class Array
@@ -23,8 +18,8 @@ public:
 
     /**
      * @brief Array constructs an array objects with pre-allocated space.
-     * @param cap, the capacity of the allocated space. This array may store
-     *              up to cap integers before it needs new memory allocation.
+     * @param capacity, the capacity of the allocated space. This array may store
+     *                  up to cap integers before it needs new memory allocation.
      */
     Array(size_t capacity);
 
@@ -54,7 +49,7 @@ public:
      * @param other
      * @return
      */
-    Array &operator=(Array &other);
+    Array &operator=(Array &&other);
 
     /**
      * @brief size returns the number of elements in Array
