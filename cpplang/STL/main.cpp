@@ -1,4 +1,4 @@
-#include <cctype>
+#include <locale>
 #include <string>
 #include <algorithm>
 #include <iostream>
