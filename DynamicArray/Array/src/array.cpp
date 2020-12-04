@@ -9,6 +9,7 @@
 #include "array.h"
 #include <utility>
 #include <iostream>
+#include <algorithm>
 
 Array::Array() : m_cap(0),
                  m_size(0)
@@ -25,17 +26,17 @@ Array::Array(size_t capacity) : m_cap(capacity),
 Array::Array(const Array &other) : m_cap(other.m_cap),
                                    m_size(other.m_size)
 {
+    std::cout << "copy construction" << std::endl;
     m_arr = std::make_unique<int[]>(m_cap);
-    for (size_t i = 0; i < m_size; ++i)
-    {
-        m_arr[i] = other[i];
-    }
+
+    std::copy(other.m_arr.get(), other.m_arr.get() + other.m_size, m_arr.get());
 }
 
 Array::Array(Array &&other) : m_cap(other.m_cap),
                               m_size(other.m_size),
                               m_arr(std::move(other.m_arr))
 {
+    std::cout << "move construction" << std::endl;
     other.m_cap = 0;
     other.m_size = 0;
     other.m_arr = nullptr;
@@ -97,11 +98,7 @@ int Array::operator[](size_t pos) const
 
 void Array::clear()
 {
-    for (size_t i = 0; i < m_size; ++i)
-    {
-        m_arr[i] = 0;
-    }
-
+    std::fill_n(m_arr.get(), m_size, 0);
     m_size = 0;
 }
 
@@ -112,10 +109,7 @@ void Array::push_back(int ele)
         size_t new_cap = 2 * m_cap + 1;
         auto new_arr = std::make_unique<int[]>(new_cap);
 
-        for (size_t i = 0; i < m_size; ++i)
-        {
-            new_arr[i] = m_arr[i];
-        }
+        std::copy(m_arr.get(), m_arr.get() + m_size, new_arr.get());
 
         m_cap = new_cap;
         std::exchange(m_arr, std::move(new_arr));
@@ -139,12 +133,20 @@ void Array::pop_back()
     {
         auto new_cap = m_size + 1;
         auto new_arr = std::make_unique<int[]>(new_cap);
-        for (size_t i = 0; i < m_size; ++i)
-        {
-            new_arr[i] = m_arr[i];
-        }
+
+        std::copy(m_arr.get(), m_arr.get() + m_size, new_arr.get());
 
         std::exchange(m_arr, std::move(new_arr));
         m_cap = new_cap;
     }
+}
+
+Array &Array::operator=(Array other)
+{
+    std::cout << "assignment" << std::endl;
+    std::swap(m_arr, other.m_arr);
+    std::swap(m_size, other.m_size);
+    std::swap(m_cap, other.m_cap);
+
+    return *this;
 }

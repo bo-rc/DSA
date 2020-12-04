@@ -1,18 +1,18 @@
 /**
- * Implement Dynamic array of int
+ * Implement Dynamic array of int. i.e. this class behaves as std::vector<int>
  * bonus: how about dynamic array of any type 'T'
 */
 
-#ifndef ARRAY_H
-#define ARRAY_H
-
-#include <memory>
+/** 
+ * Includes here 
+*/ 
+#include <cstddef>
 
 class Array
 {
 public:
     /**
-     * @brief Array default constructor
+     * @brief What is this?
      */
     Array();
 
@@ -24,17 +24,21 @@ public:
     Array(size_t cap);
 
     /**
-     * @brief Array copy constructor
+     * @brief What is this?
      * @param other
      */
     Array(const Array &other);
 
     /**
-     * @brief Array move constructor
+     * @brief What is this?
      * @param other
      */
     Array(Array &&other);
 
+    /**
+     * @brief What is RAII?
+     * @param other
+     */
     ~Array();
 
     /**
@@ -101,12 +105,33 @@ public:
 
 private:
     // add something here to store integers in an Array obj.
-    // This class is basically a container, the private fields
-    // may be used for internal storage of elements.
+    // This class is basically a container with a dynamic size, 
+    // the private fields
+    // may be used for internal storage of data.
 
-    std::unique_ptr<int[]> m_arr = nullptr;
-    size_t m_cap;
-    size_t m_size;
 };
 
-#endif // ARRAY_H
+
+// add implementations below
+
+
+// complete tests below
+void test()
+{
+    // test constructors
+
+    // test front() and back()
+
+    // test copy constructor
+
+    // test pop_back(), empty()
+    // Please test dynamic sizing of Array
+}
+
+int main()
+{
+    // add testing here
+    test();
+    return 0;
+}
+

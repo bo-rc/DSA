@@ -2,24 +2,21 @@
 #include <iostream>
 #include <cassert>
 
-int main()
-{
-    // add testing here
 
+void test()
+{
     // test default constructor
     Array myArray0;
-
     assert(myArray0.capacity() == 0);
     assert(myArray0.size() == 0);
 
     // test Array(size_t capacity);
     Array myArray1(9);
-
     assert(myArray1.capacity() == 9);
     assert(myArray1.size() == 0);
 
-    // test copy constructor
-    Array myOtherArray(10);
+    // test push_back()
+    Array myOtherArray;
     for (int i = 0; i < 20; ++i)
     {
         // test push_back() and [] operator
@@ -33,7 +30,6 @@ int main()
 
     // test copy constructor
     Array myArray2(myOtherArray);
-
     for (size_t i = 0; i < myOtherArray.size(); ++i)
     {
         assert(myOtherArray[i] == myArray2[i]);
@@ -48,12 +44,25 @@ int main()
     assert(myArray3.size() == 20);
     assert(myOtherArray.size() == 0);
 
+    // test assignment operator overloads
+    Array myArray4 {};
+    myArray4 = myArray3;
+    myArray4 = std::move(myArray3);
+    assert(myArray3.size() == 0);
+
     // test pop_back(), empty()
-    while (not myArray3.empty())
+    while (not myArray4.empty())
     {
-        myArray3.pop_back();
-        std::cout << "pop back, size: " << myArray3.size() << " cap: " << myArray3.capacity() << std::endl;
+        myArray4.pop_back();
+        std::cout << "pop back, size: " << myArray4.size() << " cap: " << myArray4.capacity() << std::endl;
     }
+}
+
+int main()
+{
+    // add testing here
+
+    test();
 
     return 0;
 }
