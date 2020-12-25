@@ -79,6 +79,7 @@ rq.put(sr)
 cq.put(sc)
 visited[sr][sc] = True
 
+# BFS traversal
 while not rq.empty():
     r = rq.get()
     c = cq.get()
@@ -92,7 +93,7 @@ while not rq.empty():
         rr = r + dr[i]
         cc = c + dc[i]
 
-        print("explore: ", (rr, cc))
+        # print("explore: ", (rr, cc))
 
         if rr < 0 or rr >= len(m) or cc < 0 or cc >= len(m[0]):
             continue
@@ -104,7 +105,7 @@ while not rq.empty():
         rq.put(rr)
         cq.put(cc)
         visited[rr][cc] = True
-        print("visited: ", (rr, cc))
+        # print("visited: ", (rr, cc))
         prev[rr][cc] = (r, c)
     
 if reached:
