@@ -16,6 +16,7 @@
 # ref: Cormen p.655
 from collections import namedtuple
 from collections import deque
+import sys
 
 Edge = namedtuple('Edge', 'node weight')
 
@@ -37,7 +38,8 @@ src = 'A'
 topOrder = deque()
 visited = {node : False for node in gNodes}
 prev = {node : node for node in gNodes}
-cost = {node : 1000 for node in gNodes}
+dist = {node : sys.maxsize for node in gNodes}
+dist['A'] = 0
 
 def dfs(node):
     visited[node] = True
@@ -54,11 +56,15 @@ for node in gNodes:
 
 print("topological ordering: ", topOrder)
 
+
 for node in topOrder:
     for edge in g[node]:
-        # edge relaxing
-        if edge.weight < cost[edge.node]:
-            cost[edge.node] = edge.weight
-            prev[edge.node] = node
+        # travel relaxing
+        toNode = edge.node
+        travel = dist[node] + edge.weight
+        if travel < dist[toNode]:
+            dist[edge.node] = travel
+            prev[toNode] = node
 
 print("paths: ", prev)
+print("dists: ", dist)
