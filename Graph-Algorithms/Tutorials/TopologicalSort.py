@@ -50,5 +50,3 @@ for i in range(n):
         dfs(i)
 
 print(order)
-
-
