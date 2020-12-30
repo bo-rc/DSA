@@ -15,14 +15,13 @@
 # after topSort, if there is a path from X to Y, X should precedes Y.
 # ref: Cormen p.655
 from collections import namedtuple
-from collections import deque
 import sys
 
 Edge = namedtuple('Edge', 'node weight')
 
 g = {
         'A': [Edge('B', 3), Edge('C', 6)],
-        'B': [Edge('D', 4), Edge('E', 11)],
+        'B': [Edge('C', 4), Edge('D', 4), Edge('E', 11)],
         'C': [Edge('D', 8), Edge('G', 11)],
         'D': [Edge('E', -4), Edge('F', 5), Edge('G', 2)],
         'E': [Edge('H', 9)],
@@ -35,7 +34,7 @@ gNodes = [node for node in g.keys()]
 
 src = 'A'
 
-topOrder = deque()
+topOrder = []
 visited = {node : False for node in gNodes}
 prev = {node : node for node in gNodes}
 dist = {node : sys.maxsize for node in gNodes}
@@ -48,16 +47,16 @@ def dfs(node):
         if not visited[n]:
             dfs(n)
     
-    topOrder.appendleft(node)
+    topOrder.append(node)
 
 for node in gNodes:
     if not visited[node]:
         dfs(node)
 
-print("topological ordering: ", topOrder)
+print("topological ordering: ", topOrder[::-1])
 
 
-for node in topOrder:
+for node in topOrder[::-1]:
     for edge in g[node]:
         # travel relaxing
         toNode = edge.node
