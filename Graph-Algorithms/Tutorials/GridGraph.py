@@ -41,84 +41,87 @@
 from queue import Queue
 from collections import deque
 
-rq = Queue()
-cq = Queue()
-
+# Find the shortest path from S to E,
+# if it exits. 
+#
+# The maze:
+#
 # S . . . .
 # * * . * .
 # . . . . .
 # * * . . *
 # E . . . *
-m = [
+#
+maze = [
         ['S', '.', '.', '.', '.'],
         ['*', '*', '.', '*', '.'],
         ['*', '*', '.', '.', '.'],
         ['*', '*', '*', '.', '*'],
-        ['*', '.', '.', 'E', '*'],
+        ['E', '.', '.', '.', '*'],
     ]
 
-for i in range(len(m)):
-    for j in range(len(m[0])):
-        if m[i][j] == 'S':
-            sr = i
-            sc = j
-        elif m[i][j] == 'E':
-            er = i
-            ec = j
+for i in range(len(maze)):
+    for j in range(len(maze[0])):
+        if maze[i][j] == 'S':
+            srcRow = i
+            srcCol = j
+        elif maze[i][j] == 'E':
+            exitRow = i
+            exitCol = j
 
-# some setup
+# setup maintainance and tools
 visited = [[False] * 5 for i in range(5)]
 prev = [[None] * 5 for i in range(5)]
 
-dr = [-1, +1, 0, 0]
-dc = [ 0, 0, +1, -1]
+directionVectorRow = [-1, +1, 0, 0]
+directionVectorCol = [ 0, 0, +1, -1]
 
-# init
+# use separate queues for row and col to 
+# ease data packing and unpacking
+rowQueue = Queue()
+colQueue = Queue()
+rowQueue.put(srcRow)
+colQueue.put(srcCol)
+visited[srcRow][srcCol] = True
 reached = False
-rq.put(sr)
-cq.put(sc)
-visited[sr][sc] = True
 
 # BFS traversal
-while not rq.empty():
-    r = rq.get()
-    c = cq.get()
+while not rowQueue.empty():
+    r = rowQueue.get()
+    c = colQueue.get()
 
-    if m[r][c] == 'E':
+    if maze[r][c] == 'E':
         reached = True
         break
 
     # explore neibhbours:
     for i in range(4):
-        rr = r + dr[i]
-        cc = c + dc[i]
+        rr = r + directionVectorRow[i]
+        cc = c + directionVectorCol[i]
 
         # print("explore: ", (rr, cc))
 
-        if rr < 0 or rr >= len(m) or cc < 0 or cc >= len(m[0]):
+        if rr < 0 or rr >= len(maze) or cc < 0 or cc >= len(maze[0]):
             continue
         if visited[rr][cc]:
             continue
-        if m[rr][cc] == '*':
+        if maze[rr][cc] == '*':
             continue
 
-        rq.put(rr)
-        cq.put(cc)
+        rowQueue.put(rr)
+        colQueue.put(cc)
         visited[rr][cc] = True
         # print("visited: ", (rr, cc))
         prev[rr][cc] = (r, c)
     
 if reached:
-    count = 0
-    path = deque()
-    while prev[er][ec] != None:
-        path.appendleft((er, ec))
-        pr, pc = prev[er][ec]
-        er, ec = pr, pc
-        count += 1
-    print("takes ", count, " steps:")
+    path = []
+    while prev[exitRow][exitCol] != None:
+        path.append((exitRow, exitCol))
+        pr, pc = prev[exitRow][exitCol]
+        exitRow, exitCol = pr, pc
+    path = path[::-1]
+    print("takes ", len(path), " steps:")
     print(path)
 else:
     print("trapped!")
-
-
