@@ -60,6 +60,7 @@ maze = [
         ['E', '.', '.', '.', '*'],
     ]
 
+# identify source and exit cells
 for i in range(len(maze)):
     for j in range(len(maze[0])):
         if maze[i][j] == 'S':
@@ -69,10 +70,11 @@ for i in range(len(maze)):
             exitRow = i
             exitCol = j
 
-# setup maintainance and tools
+# setup maintenance data
 visited = [[False] * 5 for i in range(5)]
 prev = [[None] * 5 for i in range(5)]
 
+# use direction vector to simplify neighborhood exploration.
 directionVectorRow = [-1, +1, 0, 0]
 directionVectorCol = [ 0, 0, +1, -1]
 
@@ -94,7 +96,7 @@ while not rowQueue.empty():
         reached = True
         break
 
-    # explore neibhbours:
+    # explore neighbours:
     for i in range(4):
         rr = r + directionVectorRow[i]
         cc = c + directionVectorCol[i]
