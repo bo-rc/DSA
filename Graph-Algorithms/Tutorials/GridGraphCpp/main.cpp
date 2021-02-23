@@ -33,11 +33,21 @@ void debug_print (std::vector<std::vector<Cell>>& prev)
     {
         for (const auto& cell : row)
         {
-            std::cout << std::setw(8) << "(" << cell.row << "," << cell.col << ") ";
+            std::cout << "(" << std::setw(3) << cell.row << "," << std::setw(3) << cell.col << ") ";
         }
         std::cout << std::endl;  
     }
     std::cout << std::endl;
+}
+
+void print_path (const std::vector<Cell>& path)
+{
+    std::cout << "Takes: " << path.size() << " steps: Source->";
+        for (const auto& cell : path)
+        {
+            std::cout << "(" << cell.row << "," << cell.col << ")->";
+        }
+        std::cout << "Exit." << std::endl;
 }
 
 struct MazeExits {
@@ -104,20 +114,10 @@ int main()
             int rr = row + dir_row[i];
             int cc = col + dir_col[i];
 
-            if (rr < 0 or cc < 0 or rr >= maze.size() or cc >= maze[0].size())
-            {
+            if (rr < 0 or cc < 0 or rr >= maze.size() or cc >= maze[0].size() 
+                or visited[rr][cc] 
+                or maze[rr][cc] == '*')
                 continue;
-            }
-
-            if (visited[rr][cc])
-            {
-                continue;
-            }
-
-            if (maze[rr][cc] == '*')
-            {
-                continue;
-            }
 
             rowQueue.push(rr);
             colQueue.push(cc);
@@ -157,11 +157,7 @@ int main()
 
         std::reverse(path.begin(), path.end());
 
-        for (const auto& cell : path)
-        {
-            std::cout << "(" << cell.row << "," << cell.col << ") ";
-        }
-        std::cout << std::endl;
+        print_path(path);
     }
     else
     {
