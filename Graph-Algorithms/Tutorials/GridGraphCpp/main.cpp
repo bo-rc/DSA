@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <iomanip>
 #include <queue>
 #include <algorithm>
 
@@ -9,9 +10,14 @@ const std::vector<std::string> maze {
     "***..",
     "E...."
 }; 
+struct Cell {
+    int row;
+    int col;
+};
 
-void print_visited (const std::vector<std::vector<bool>>& visited)
+void debug_print (const std::vector<std::vector<bool>>& visited)
 {
+    std::cout << std::boolalpha;
     for (const auto& row : visited)
     {
         for (const auto& cell : row)
@@ -21,27 +27,28 @@ void print_visited (const std::vector<std::vector<bool>>& visited)
     std::cout << std::endl;
 }
 
-void print_prev (const std::vector<std::vector<std::vector<int>>>& prev)
+void debug_print (std::vector<std::vector<Cell>>& prev)
 {
     for (const auto& row : prev)
     {
         for (const auto& cell : row)
         {
-            std::cout << "(";
-            for (const auto& index : cell)
-                std::cout << index << ",";
-            std::cout <<") ";
+            std::cout << std::setw(8) << "(" << cell.row << "," << cell.col << ") ";
         }
-        std::cout << std::endl;
+        std::cout << std::endl;  
     }
     std::cout << std::endl;
 }
 
-int main()
-{    
-    // find S and E
-    int src_row, src_col, exit_row, exit_col;
+struct MazeExits {
+    Cell src;
+    Cell exit;
+};
 
+MazeExits findSourceExit(const std::vector<std::string>& maze)
+{  
+    int src_row,  src_col, exit_row, exit_col;
+    
     for (size_t r = 0; r < maze.size(); ++r)
     {
         for (size_t c = 0; c < maze[0].size(); ++c )
@@ -58,66 +65,39 @@ int main()
             }
         }
     }
+    return {{src_row, src_col}, {exit_row, exit_col}};
+}
 
-    std::cout << "source: (" << src_row << "," << src_col << ")" << std::endl;
-    std::cout << "exit: (" << exit_row << "," << exit_col << ")" << std::endl;
+int main()
+{        
+    auto mazeExits = findSourceExit(maze);
+
+    int src_row{mazeExits.src.row};
+    int src_col{mazeExits.src.col};
+    int exit_row{mazeExits.exit.row};
+    int exit_col{mazeExits.exit.col};
 
     // Setup BFS grid search
     std::vector<int> dir_row {-1, +1,  0,  0};
     std::vector<int> dir_col { 0,  0, -1, +1};
 
+    std::vector<std::vector<bool>> visited(maze.size(), std::vector<bool>(maze[0].size(), false));
+    std::vector<std::vector<Cell>> prev(maze.size(), std::vector<Cell>(maze[0].size(), {-1, -1}));
+
     std::queue<int> rowQueue;
-    std::queue<int> colQueue;
-
-    std::vector<std::vector<bool>> visited;
-    visited.resize(maze.size());
-
-    for (auto & row : visited)
-    {
-        row.resize(maze[0].size(), false);
-    }
-
-    std::vector<std::vector<std::vector<int>>> prev;
-    prev.resize(maze.size());
-
-    for (auto & row : prev)
-    {
-        row.resize(maze[0].size());
-        for (auto& cell : row)
-        {
-            cell.push_back(-1);
-            cell.push_back(-1);
-        }
-    }
-
     rowQueue.push(src_row);
+    std::queue<int> colQueue;
     colQueue.push(src_col);
     visited[src_row][src_col] = true;
 
-    std::cout << " before BFS: " << std::endl;
-    std::cout << " visited: " << std::endl;
-    print_visited(visited);
-
-    std::cout << " prev: " << std::endl;
-    print_prev(prev);
-
-    // BFS on maze graph
     bool pathFound = false;
     while (not rowQueue.empty())
     {
         int row = rowQueue.front();
-        rowQueue.pop();
         int col = colQueue.front();
+        rowQueue.pop();
         colQueue.pop();
-
-        std::cout << "pop: " << row << "," << col << std::endl;
-
-        std::cout << " visited: " << std::endl;
-        print_visited(visited);
-
-        std::cout << " prev: " << std::endl;
-        print_prev(prev);
-
+  
         // explore neighborhood of (row, col)
         for (size_t i = 0; i < 4; ++i)
         {
@@ -126,27 +106,21 @@ int main()
 
             if (rr < 0 or cc < 0 or rr >= maze.size() or cc >= maze[0].size())
             {
-                std::cout << "continue due to out bound rr = " << rr <<", cc =" << cc << std::endl;
                 continue;
             }
 
             if (visited[rr][cc])
             {
-                std::cout << "continue due to visited rr = " << rr <<", cc =" << cc << std::endl;
                 continue;
             }
 
             if (maze[rr][cc] == '*')
             {
-                std::cout << "continue due to blocked rr = " << rr <<", cc =" << cc << std::endl;
                 continue;
             }
 
-            std::cout << "exploring: (" << rr << ", " << cc << ")" << std::endl;
-
             rowQueue.push(rr);
             colQueue.push(cc);
-            std::cout << "push: " << rr << "," << cc << std::endl;
             visited[rr][cc] = true;
             prev[rr][cc] = {row, col};
 
@@ -158,37 +132,36 @@ int main()
             }
         }
     }
-
-    std::vector<std::vector<int>> path;
-
+    
     std::cout << "print the final prev" << std::endl;
-    print_prev(prev);
+    debug_print(prev);
+    std::vector<Cell> path;
     if (pathFound)
     {
-        int rr {exit_row};
-        int cc {exit_col}; // current row and col index
-        
-        while (maze[rr][cc] != 'S')
-        {
-            std::cout << rr << "," << cc << " prev: " << prev[rr][cc][0] << "," << prev[rr][cc][1] << std::endl;
-            std::vector<int> cell {rr, cc};
-            path.push_back(cell);
-            rr = prev[rr][cc][0];
-            cc = prev[rr][cc][1];
+        while (true) {
+
+            path.push_back({exit_row, exit_col});
+            auto prev_row = prev[exit_row][exit_col].row;
+            auto prev_col = prev[exit_row][exit_col].col;
+            auto prevCell = maze[prev_row][prev_col];
+
+            if (prevCell == 'S') {
+                break;
+            }
+
+            exit_row = prev_row;
+            exit_col = prev_col;
         }
 
-        std::cout << path.size() << " steps: " << std::endl;
+        path.push_back({src_row, src_col});
+
         std::reverse(path.begin(), path.end());
-        
+
         for (const auto& cell : path)
         {
-            std::cout << "(";
-            for (const auto& index: cell)
-            {
-                std::cout << index << ",";
-            }
-            std::cout << "), ";
+            std::cout << "(" << cell.row << "," << cell.col << ") ";
         }
+        std::cout << std::endl;
     }
     else
     {
