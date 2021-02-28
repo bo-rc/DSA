@@ -26,41 +26,58 @@ void step(int &index, int wordLen)
 class WordConcatenation
 {
 public:
-    static vector<int> findWordConcatenation(const string &str, const vector<string> &words) {
-    unordered_map<string, int> wordFrequencyMap;
-    for (auto word : words) {
-      wordFrequencyMap[word]++;
+    static vector<int> findWordConcatenation(const string &str, const vector<string> &words)
+    {
+        vector<int> ret{};
+        int wordLen = words.at(0).size();
+        unordered_map<string, int> wordMap{}; // to record occurance of words.
+        for_each(words.cbegin(), words.cend(), [&wordMap](auto w) { ++wordMap[w]; });
+        const unordered_map<string, int> wordMap_copy{wordMap};
+        int left = 0;
+        int right = 0;
+        int numMatched = 0; // when we have words.size() num of words, we have complete match
+
+        // sliding: expand and shrink
+        while (right + wordLen <= str.size())
+        {
+            string word = str.substr(right, wordLen);
+
+            if (wordMap.count(word) == 0) // non relevant word
+            {
+                step(right, wordLen);
+                left = right;
+                // need to reset counting state
+                wordMap = wordMap_copy;
+            }
+            else // relevant word
+            {
+                if (wordMap[word] > 0) // still OK to add to collection
+                {
+                    ++numMatched;
+                    --wordMap[word];
+                    step(right, wordLen);
+                }
+                else // redundancy violation -> shrink from left until repeat word is dropped
+                {
+                    string leftWord{};
+                    do
+                    {
+                        leftWord = str.substr(left, wordLen);
+                        ++wordMap[leftWord];
+                        --numMatched;
+                        
+                        step(left, wordLen);
+
+                    } while (leftWord != word);
+                }
+            }
+
+            if (numMatched == words.size())
+                ret.push_back(left);
+        }
+
+        return ret;
     }
-
-    vector<int> resultIndices;
-    int wordsCount = words.size(), wordLength = words[0].length();
-
-    for (int i = 0; i <= int(str.length()) - wordsCount * wordLength; i++) {
-      unordered_map<string, int> wordsSeen;
-      for (int j = 0; j < wordsCount; j++) {
-        int nextWordIndex = i + j * wordLength;
-        // get the next word from the string
-        string word = str.substr(nextWordIndex, wordLength);
-        if (wordFrequencyMap.find(word) ==
-            wordFrequencyMap.end()) {  // break if we don't need this word
-          break;
-        }
-
-        wordsSeen[word]++;  // add the word to the 'wordsSeen' map
-
-        // no need to process further if the word has higher frequency than required
-        if (wordsSeen[word] > wordFrequencyMap[word]) {
-          break;
-        }
-
-        if (j + 1 == wordsCount) {  // store index if we have found all the words
-          resultIndices.push_back(i);
-        }
-      }
-    }
-
-    return resultIndices;
-  }
 };
 
 int main(int argc, char *argv[])
