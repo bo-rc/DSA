@@ -24,7 +24,7 @@
 using namespace std;
 
 struct result_t{
-    int size;
+    size_t size;
     int start;
 };
 
