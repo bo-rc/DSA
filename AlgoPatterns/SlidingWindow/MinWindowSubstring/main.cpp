@@ -1,12 +1,17 @@
 /**
- * Problem Statement
- * Permutation in a String (hard)
- * Given a string and a pattern, find out if the string contains any permutation of the pattern.
+ * Given a string and a pattern, find the smallest substring in the given string 
+ * which has all the characters of the given pattern.
  * 
- * Example 1:
- * Input: String="oidbcaf", Pattern="abc"
- * Output: true
- * Explanation: The string contains "bca" which is a permutation of the given pattern.
+ * Example:
+ * Input: String="aabdec", Pattern="abc"
+ * Output: "abdec"
+ * Explanation: The smallest substring having all characters of the pattern is "abdec"
+ * 
+ * Sliding window:
+ *  1. expand right
+ *  2. check if condition is met
+ *      2.a shrink left until condition is not met, record result of last met, expand right.
+ *  3. termination condition is when expand cannot happen anymore.
  */
 
 #include <algorithm>
