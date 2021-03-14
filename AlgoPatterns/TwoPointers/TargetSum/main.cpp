@@ -16,12 +16,29 @@ using namespace std;
 #include <iostream>
 #include <vector>
 
+using namespace std;
+
 class PairWithTargetSum
 {
 public:
     static pair<int, int> search(const vector<int> &arr, int targetSum)
     {
         // TODO: Write your code here
+        size_t backPtr = arr.size();
+        size_t frontPtr = 0;
+
+        for (size_t frontPtr = 0, backPtr = arr.size(); frontPtr < backPtr; /* update in loop body */)
+        {
+            int sum = arr.at(frontPtr) + arr.at(backPtr - 1);
+            
+            if (sum == targetSum)
+                return make_pair(frontPtr, backPtr - 1);
+
+            if (sum < targetSum)
+                ++frontPtr;
+            else
+                --backPtr;
+        }
         return make_pair(-1, -1);
     }
 };

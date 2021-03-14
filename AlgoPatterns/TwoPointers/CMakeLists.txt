@@ -20,3 +20,6 @@ project(TwoPointers)
 #-------------------------------------------------------------------------------
 #
 add_subdirectory(TargetSum)
+add_subdirectory(RemoveKey)
+add_subdirectory(RemoveDuplicates)
+add_subdirectory(TripletSumToZero)
